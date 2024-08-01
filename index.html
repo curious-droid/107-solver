@@ -3,20 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPP to JS Converter</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Calculate Set Solutions</title>
 </head>
 <body>
-    <h1>CPP to JS Converter</h1>
-    <form id="inputForm">
-        <input type="number" id="a" placeholder="Enter a" required>
-        <input type="number" id="b" placeholder="Enter b" required>
-        <input type="number" id="c" placeholder="Enter c" required>
-        <input type="number" id="d" placeholder="Enter d" required>
-        <input type="number" id="e" placeholder="Enter e" required>
-        <button type="submit">Calculate</button>
-    </form>
-    <div id="output"></div>
-    <script src="script.js"></script>
+    <h1>Calculate Set Solutions</h1>
+    <input type="text" id="inputValues" placeholder="Enter five integers separated by spaces">
+    <button onclick="main()">Calculate</button>
+    <pre id="output"></pre>
+
+    <script>
+        const mapo = new Map();
+
+        function calculate(set_) {
+            if (set_.size === 1) {
+                const item = [...set_][0];
+                if (item[0] === 107) {
+                    return new Set([item[1][0]]);
+                }
+                return new Set();
+            }
+
+            if (mapo.has(set_)) {
+                return mapo.get(set_);
+            }
+
+            const solutions = new Set();
+            const setList = [...set_];
+
+            for (let i = 0; i < setList.length; i++) {
+                for (let j = 0; j < setList.length; j++) {
+                    if (i === j) continue;
+
+                    const item_i = setList[i];
+                    const item_j = setList[j];
+
+                    if (!item_i[1][1][0][0][1] || !item_j[1][1][0][0][1]) {
+                        continue;
+                    }
+                    if (!item_j[1][1][1][0][0] || item_i[1][1][1][0][1] > item_j[0]) {
+                        continue;
+                    } else {
+                        const newset = new Set([...setList.filter((_, k) => k !== i && k !== j)]);
+                        const newrep = [item_i[0] + item_j[0],
+                            [item_i[1][0] + " + " + item_j[1][0],
+                            [[false, item_i[1][1][0][0][1] && item_j[1][1][0][0][1], false],
+                            [false, item_j[0], true, item_i[0] + item_j[0]]]]];
+                        newset.add(newrep);
+                        const subSolutions = calculate(newset);
+                        subSolutions.forEach(s => solutions.add(s));
+                    }
+
+                    if (!item_j[1][1][1][1][0] || item_i[1][1][1][1][1] > item_j[0]) {
+                        continue;
+                    } else if (item_j[1][1][0][1] || item_i[1][1][0][1]) {
+                        continue;
+                    } else {
+                        const newset = new Set([...setList.filter((_, k) => k !== i && k !== j)]);
+                        const newrep = [item_i[0] * item_j[0],
+                            [[(item_i[1][1][0][0][0] ? "" : "(") + item_i[1][0] + (item_i[1][1][0][0][0] ? "" : ")") + " * " + (item_j[1][1][0][0][0] ? "" : "(") + item_j[1][0] + (item_j[1][1][0][0][0] ? "" : ")")],
+                            [[true, true, item_i[1][1][0][1] || item_j[1][1][0][1]], [true, item_i[0] * item_j[0], false, item_j[0]]]]];
+                        newset.add(newrep);
+                        const subSolutions = calculate(newset);
+                        subSolutions.forEach(s => solutions.add(s));
+                    }
+
+                    if (item_j[1][1][0][0][1] && item_i[1][1][0][0][1] && item_j[0] >= item_i[0]) {
+                        const newset = new Set([...setList.filter((_, k) => k !== i && k !== j)]);
+                        const newrep = [item_j[0] - item_i[0],
+                            [item_j[1][0] + " - " + (item_i[1][1][0][0][0] ? "" : "(") + item_i[1][0] + (item_i[1][1][0][0][0] ? "" : ")"),
+                            [[false, false, false], [true, item_j[0] - item_i[0], true, item_j[0] - item_i[0]]]]];
+                        newset.add(newrep);
+                        const subSolutions = calculate(newset);
+                        subSolutions.forEach(s => solutions.add(s));
+                    }
+
+                    if (item_j[1][1][0][1] || item_j[0] === 0) {
+                        continue;
+                    } else {
+                        const newset = new Set([...setList.filter((_, k) => k !== i && k !== j)]);
+                        const newrep = [item_i[0] / item_j[0],
+                            [[(item_i[1][1][0][0][0] ? "" : "(") + item_i[1][0] + (item_i[1][1][0][0][0] ? "" : ")") + " / (" + item_j[1][0] + ")"],
+                            [[false, true, true], [true, item_i[0] / item_j[0], true, item_i[0] / item_j[0]]]]];
+                        newset.add(newrep);
+                        const subSolutions = calculate(newset);
+                        subSolutions.forEach(s => solutions.add(s));
+                    }
+                }
+            }
+
+            mapo.set(set_, solutions);
+            return solutions;
+        }
+
+        function solve(a, b, c, d, e) {
+            const A = [a, [a.toString(), [[true, true, false], [true, a, true, a]]]];
+            const B = [b, [b.toString(), [[true, true, false], [true, b, true, b]]]];
+            const C = [c, [c.toString(), [[true, true, false], [true, c, true, c]]]];
+            const D = [d, [d.toString(), [[true, true, false], [true, d, true, d]]]];
+            const E = [e, [e.toString(), [[true, true, false], [true, e, true, e]]]];
+
+            const set_ = new Set([A, B, C, D, E]);
+            const solutions = calculate(set_);
+            const output = [...solutions].join('\n');
+            document.getElementById('output').textContent = output;
+        }
+
+        function main() {
+            const inputValues = document.getElementById('inputValues').value.split(' ').map(Number);
+            solve(...inputValues);
+        }
+    </script>
 </body>
 </html>
