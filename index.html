@@ -35,12 +35,7 @@
 
             // Capture the output (this requires you to adjust your C++ code to provide output properly)
             const result = Module.ccall('compute', 'string', ['number', 'number', 'number', 'number', 'number'], [a, b, c, d, e]);
-            if(result) {
-                document.getElementById('output').textContent = result;
-            }
-            else {
-                document.getElementById('output').textContent = "NO SOLUTIONS";
-            }
+            document.getElementById('output').textContent = result;
         }
     </script>
 
