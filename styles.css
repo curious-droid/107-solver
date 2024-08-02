@@ -30,7 +30,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-input[type="text"] {
+input[type="number"] {
     width: calc(100% - 40px);
     padding: 10px;
     border: 1px solid #ccc;
