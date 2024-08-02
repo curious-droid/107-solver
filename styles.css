@@ -14,7 +14,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
     text-align: center;
 }
@@ -25,20 +25,16 @@ h1 {
 
 .input-container {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-input[type="number"] {
-    width: 50px; /* Make each input field a square */
-    height: 50px; /* Make each input field a square */
-    text-align: center;
-    padding: 0;
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
+    margin-right: 10px;
 }
 
 button {
@@ -49,8 +45,6 @@ button {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 16px;
-    margin-top: 10px;
 }
 
 button:hover {
@@ -64,5 +58,4 @@ pre {
     border-radius: 4px;
     white-space: pre-wrap;
     word-wrap: break-word;
-    text-align: left;
 }

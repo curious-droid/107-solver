@@ -10,32 +10,28 @@
     <div class="container">
         <h1>107 Solver</h1>
         <div class="input-container">
-            <input type="number" id="input1" placeholder="0" maxlength="1">
-            <input type="number" id="input2" placeholder="0" maxlength="1">
-            <input type="number" id="input3" placeholder="0" maxlength="1">
-            <input type="number" id="input4" placeholder="0" maxlength="1">
-            <input type="number" id="input5" placeholder="0" maxlength="1">
+            <input type="text" id="input" placeholder="Enter 5 numbers separated by space">
+            <button onclick="runCalculate()">Calculate</button>
         </div>
-        <button onclick="runCalculate()">Calculate</button>
         <pre id="output"></pre>
     </div>
 
     <script>
         function runCalculate() {
-            const inputs = [
-                document.getElementById('input1').value,
-                document.getElementById('input2').value,
-                document.getElementById('input3').value,
-                document.getElementById('input4').value,
-                document.getElementById('input5').value
-            ];
-            
-            const args = inputs.map(Number);
+            const input = document.getElementById('input').value.trim();
+            const args = input.split(' ').map(Number);
 
-            if (args.some(isNaN)) {
-                alert("Please enter all 5 numbers.");
+            if (args.length !== 5) {
+                alert("Please enter exactly 5 numbers.");
                 return;
             }
+
+            // Allocate memory for the input
+            const a = args[0];
+            const b = args[1];
+            const c = args[2];
+            const d = args[3];
+            const e = args[4];
 
             // Capture the output (this requires you to adjust your C++ code to provide output properly)
             const result = Module.ccall('compute', 'string', ['number', 'number', 'number', 'number', 'number'], [a, b, c, d, e]);
