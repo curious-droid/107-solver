@@ -1,68 +1,48 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>107 Solver</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>107 Solver</h1>
+        <div class="input-container">
+            <input type="number" id="input1" placeholder="0" maxlength="1">
+            <input type="number" id="input2" placeholder="0" maxlength="1">
+            <input type="number" id="input3" placeholder="0" maxlength="1">
+            <input type="number" id="input4" placeholder="0" maxlength="1">
+            <input type="number" id="input5" placeholder="0" maxlength="1">
+        </div>
+        <button onclick="runCalculate()">Calculate</button>
+        <pre id="output"></pre>
+    </div>
 
-.container {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 600px;
-    width: 100%;
-    text-align: center;
-}
+    <script>
+        function runCalculate() {
+            const inputs = [
+                document.getElementById('input1').value,
+                document.getElementById('input2').value,
+                document.getElementById('input3').value,
+                document.getElementById('input4').value,
+                document.getElementById('input5').value
+            ];
+            
+            const args = inputs.map(Number);
 
-h1 {
-    margin-bottom: 20px;
-}
+            if (args.some(isNaN)) {
+                alert("Please enter all 5 numbers.");
+                return;
+            }
 
-.input-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+            // Capture the output (this requires you to adjust your C++ code to provide output properly)
+            const result = Module.ccall('compute', 'string', ['number', 'number', 'number', 'number', 'number'], [a, b, c, d, e]);
+            document.getElementById('output').textContent = result;
+        }
+    </script>
 
-input[type="number"] {
-    width: 50px; /* Make each input field a square */
-    height: 50px; /* Make each input field a square */
-    text-align: center;
-    padding: 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007BFF;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-pre {
-    background-color: #f8f8f8;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    text-align: left;
-}
+    <script src="calculate.js"></script>
+</body>
+</html>
